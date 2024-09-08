@@ -21,13 +21,10 @@ public class CustomLinkedList<T> {
 
         if (size == 0) {
             head = node;
-            tail = node;
-            size++;
-
-            return true;
+        } else {
+            tail.next = node;
         }
 
-        tail.next = node;
         tail = node;
         size++;
 
@@ -36,7 +33,7 @@ public class CustomLinkedList<T> {
 
     public T getFirst() {
         if (size == 0) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("No elements in list, actual size is 0");
         }
 
         return head.element;
@@ -44,11 +41,10 @@ public class CustomLinkedList<T> {
 
     public T get(int index) {
         if (index >= size || index < 0) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Index goes beyond the boundaries of the list");
         }
 
         Node<T> current = head;
-
         for (int i = 0; i < index; i++) {
             current = current.next;
         }
@@ -58,15 +54,14 @@ public class CustomLinkedList<T> {
 
     public T remove() {
         if (size == 0) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("No elements in list, actual size is 0");
         }
-
-        T deletedElement = head.element;
 
         if (size == 1) {
             tail = null;
         }
 
+        T deletedElement = head.element;
         head = head.next;
         size--;
 
@@ -75,7 +70,7 @@ public class CustomLinkedList<T> {
 
     public T remove(int index) {
         if (index >= size || index < 0) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Index goes beyond the boundaries of the list");
         }
 
         if (index == 0) {
@@ -90,12 +85,11 @@ public class CustomLinkedList<T> {
             current = current.next;
         }
 
-        T deletedElement = current.element;
-
         if (current == tail) {
             tail = prev;
         }
 
+        T deletedElement = current.element;
         prev.next = current.next;
         size--;
 
@@ -109,15 +103,15 @@ public class CustomLinkedList<T> {
 
         Node<T> current = head;
 
-        while (current.next != null) {
+        do {
             if (current.element.equals(element)) {
                 return true;
             }
 
             current = current.next;
-        }
+        } while (current != null);
 
-        return current.element.equals(element);
+        return false;
     }
 
     public boolean addAll(Collection<? extends T> collection) {
@@ -148,17 +142,15 @@ public class CustomLinkedList<T> {
         return size;
     }
 
-}
+    private static class Node<T> {
 
-class Node<T> {
+        T element;
 
-    T element;
+        Node<T> next;
 
-    Node<T> next;
-
-    public Node(T element) {
-        this.element = element;
-        this.next = null;
+        public Node(T element) {
+            this.element = element;
+            this.next = null;
+        }
     }
-
 }
