@@ -13,3 +13,4 @@ plugins {
 rootProject.name = "Homework_1"
 include("app")
 include("spring-app")
+include("simple-starter")
