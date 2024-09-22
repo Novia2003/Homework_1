@@ -1,12 +1,9 @@
 package ru.tbank.repository;
 
-import org.springframework.stereotype.Component;
-
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-@Component
 public class CustomRepository<T> {
 
     private final ConcurrentHashMap<Long, T> storage = new ConcurrentHashMap<>();
