@@ -17,22 +17,22 @@ import ru.tbank.timed.Timed;
 @RequiredArgsConstructor
 public class DataInitializer {
 
-    private static final String CATEGORIES_URL = "https://kudago.com/public-api/v1.4/place-categories";
-    private static final String LOCATIONS_URL = "https://kudago.com/public-api/v1.4/locations";
+    private static final String CATEGORIES_URL = "/place-categories";
+    private static final String LOCATIONS_URL = "/locations";
 
     private final CategoryService categoryService;
     private final LocationService locationService;
+
+    private final RestTemplate kudagoRestTemplate;
 
     @EventListener(ApplicationReadyEvent.class)
     @Timed
     public void init() {
         log.info("Starting data initialization...");
 
-        RestTemplate restTemplate = new RestTemplate();
-
-        CategoryKudagoResponseDTO[] categories = restTemplate.getForObject(CATEGORIES_URL, CategoryKudagoResponseDTO[].class);
+        var categories = kudagoRestTemplate.getForObject(CATEGORIES_URL, CategoryKudagoResponseDTO[].class);
         if (categories == null) {
-            log.error("Failed to fetch categories. Received null response.");
+            log.info("No categories fetched. Received null response.");
         } else {
             log.info("Fetched {} categories.", categories.length);
 
@@ -41,9 +41,9 @@ public class DataInitializer {
             }
         }
 
-        LocationKudagoResponseDTO[] locations = restTemplate.getForObject(LOCATIONS_URL, LocationKudagoResponseDTO[].class);
+        var locations = kudagoRestTemplate.getForObject(LOCATIONS_URL, LocationKudagoResponseDTO[].class);
         if (locations == null) {
-            log.error("Failed to fetch locations. Received null response.");
+            log.info("No locations fetched. Received null response.");
         } else {
             log.info("Fetched {} locations.", locations.length);
 
