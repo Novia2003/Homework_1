@@ -45,6 +45,10 @@ public class CategoryService {
     }
 
     private CategoryDTO parseModelToDTO(Category category) {
+        if (category == null) {
+            return null;
+        }
+
         CategoryDTO dto = new CategoryDTO();
         dto.setName(category.getName());
         dto.setSlug(category.getSlug());
