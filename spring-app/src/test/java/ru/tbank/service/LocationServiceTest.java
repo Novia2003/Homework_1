@@ -2,6 +2,7 @@ package ru.tbank.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -13,6 +14,7 @@ import ru.tbank.repository.CustomRepository;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -70,7 +72,15 @@ class LocationServiceTest {
 
         locationService.createLocation(dto);
 
-        verify(repository).save(any(Location.class));
+        ArgumentCaptor<Location> locationCaptor = ArgumentCaptor.forClass(Location.class);
+        verify(repository).save(locationCaptor.capture());
+
+        List<Location> capturedLocations = locationCaptor.getAllValues();
+        assertEquals(1, capturedLocations.size());
+
+        Location capturedLocation = capturedLocations.get(0);
+        assertEquals("msk", capturedLocation.getSlug());
+        assertEquals("Москва", capturedLocation.getName());
     }
 
     @Test
@@ -79,7 +89,15 @@ class LocationServiceTest {
 
         locationService.updateLocation(1L, dto);
 
-        verify(repository).update(eq(1L), any(Location.class));
+        ArgumentCaptor<Location> locationCaptor = ArgumentCaptor.forClass(Location.class);
+        verify(repository).update(eq(1L), locationCaptor.capture());
+
+        List<Location> capturedLocations = locationCaptor.getAllValues();
+        assertEquals(1, capturedLocations.size());
+
+        Location capturedLocation = capturedLocations.get(0);
+        assertEquals("Москва", capturedLocation.getName());
+        assertEquals("msk", capturedLocation.getSlug());
     }
 
     @Test

@@ -2,6 +2,7 @@ package ru.tbank.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -13,6 +14,7 @@ import ru.tbank.repository.CustomRepository;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -72,7 +74,15 @@ class CategoryServiceTest {
 
         categoryService.createCategory(dto);
 
-        verify(repository).save(any(Category.class));
+        ArgumentCaptor<Category> categoryCaptor = ArgumentCaptor.forClass(Category.class);
+        verify(repository).save(categoryCaptor.capture());
+
+        List<Category> capturedCategories = categoryCaptor.getAllValues();
+        assertEquals(1, capturedCategories.size());
+
+        Category capturedCategory = capturedCategories.get(0);
+        assertEquals("airports", capturedCategory.getSlug());
+        assertEquals("Аэропорты", capturedCategory.getName());
     }
 
     @Test
@@ -81,7 +91,15 @@ class CategoryServiceTest {
 
         categoryService.updateCategory(1L, dto);
 
-        verify(repository).update(eq(1L), any(Category.class));
+        ArgumentCaptor<Category> categoryCaptor = ArgumentCaptor.forClass(Category.class);
+        verify(repository).update(eq(1L), categoryCaptor.capture());
+
+        List<Category> capturedCategories = categoryCaptor.getAllValues();
+        assertEquals(1, capturedCategories.size());
+
+        Category capturedCategory = capturedCategories.get(0);
+        assertEquals("Аэропорты", capturedCategory.getName());
+        assertEquals("airports", capturedCategory.getSlug());
     }
 
     @Test
