@@ -1,20 +1,20 @@
-package ru.tbank.configuration;
+package ru.tbank.configuration.rest;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
-import ru.tbank.configuration.property.RestProperties;
+import ru.tbank.configuration.property.rest.KudagoRestProperties;
 
 @Configuration
 @RequiredArgsConstructor
-public class RestConfiguration {
+public class KudagoRestConfiguration {
 
     @Bean
     public RestTemplate kudagoRestTemplate(
             RestTemplateBuilder restTemplateBuilder,
-            RestProperties properties
+            KudagoRestProperties properties
     ) {
         return restTemplateBuilder
                 .rootUri(properties.getUrl())
