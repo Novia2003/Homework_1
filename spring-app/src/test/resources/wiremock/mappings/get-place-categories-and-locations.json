@@ -1,0 +1,77 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/place-categories"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": [
+          {
+            "id": 123,
+            "slug": "airports",
+            "name": "Аэропорты"
+          },
+          {
+            "id": 89,
+            "slug": "amusement",
+            "name": "Развлечения"
+          },
+          {
+            "id": 114,
+            "slug": "animal-shelters",
+            "name": "Питомники"
+          },
+          {
+            "id": 48,
+            "slug": "theatre",
+            "name": "Театры"
+          },
+          {
+            "id": 127,
+            "slug": "workshops",
+            "name": "Мастерские"
+          }
+        ]
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/locations"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": [
+          {
+            "slug": "ekb",
+            "name": "Екатеринбург"
+          },
+          {
+            "slug": "kzn",
+            "name": "Казань"
+          },
+          {
+            "slug": "msk",
+            "name": "Москва"
+          },
+          {
+            "slug": "nnv",
+            "name": "Нижний Новгород"
+          },
+          {
+            "slug": "spb",
+            "name": "Санкт-Петербург"
+          }
+        ]
+      }
+    }
+  ]
+}

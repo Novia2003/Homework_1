@@ -5,10 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 import ru.tbank.dto.category.CategoryKudagoResponseDTO;
 import ru.tbank.dto.location.LocationKudagoResponseDTO;
 import ru.tbank.service.CategoryService;
+import ru.tbank.service.KudagoService;
 import ru.tbank.service.LocationService;
 import ru.tbank.timed.Timed;
 
@@ -17,20 +17,16 @@ import ru.tbank.timed.Timed;
 @RequiredArgsConstructor
 public class DataInitializer {
 
-    private static final String CATEGORIES_URL = "/place-categories";
-    private static final String LOCATIONS_URL = "/locations";
-
     private final CategoryService categoryService;
     private final LocationService locationService;
-
-    private final RestTemplate kudagoRestTemplate;
+    private final KudagoService kudagoService;
 
     @EventListener(ApplicationReadyEvent.class)
     @Timed
     public void init() {
         log.info("Starting data initialization...");
 
-        var categories = kudagoRestTemplate.getForObject(CATEGORIES_URL, CategoryKudagoResponseDTO[].class);
+        var categories = kudagoService.getCategories();
         if (categories == null) {
             log.info("No categories fetched. Received null response.");
         } else {
@@ -41,7 +37,7 @@ public class DataInitializer {
             }
         }
 
-        var locations = kudagoRestTemplate.getForObject(LOCATIONS_URL, LocationKudagoResponseDTO[].class);
+        var locations = kudagoService.getLocations();
         if (locations == null) {
             log.info("No locations fetched. Received null response.");
         } else {
