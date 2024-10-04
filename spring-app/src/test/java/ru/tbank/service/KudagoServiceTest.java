@@ -1,19 +1,26 @@
 package ru.tbank.service;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
@@ -92,5 +99,43 @@ class KudagoServiceTest {
 
         assertEquals("spb", result[4].getSlug());
         assertEquals("Санкт-Петербург", result[4].getName());
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "400", "500"
+    })
+    void testKudagoBadResponseCategories(int responseHttpCode) {
+        wireMock.stubFor(
+                WireMock.get(urlMatching("/place-categories"))
+                        .willReturn(
+                                aResponse()
+                                        .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                                        .withStatus(responseHttpCode)
+                        )
+        );
+
+        var result = kudagoService.getCategories();
+
+        assertNull(result);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "400", "500"
+    })
+    void testKudagoBadResponseLocations(int responseHttpCode) {
+        wireMock.stubFor(
+                WireMock.get(urlMatching("/locations"))
+                        .willReturn(
+                                aResponse()
+                                        .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                                        .withStatus(responseHttpCode)
+                        )
+        );
+
+        var result = kudagoService.getLocations();
+
+        assertNull(result);
     }
 }
