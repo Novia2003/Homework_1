@@ -31,6 +31,8 @@ dependencies {
     testImplementation("org.wiremock:wiremock-standalone:3.6.0")
     testImplementation("org.wiremock.integrations.testcontainers:wiremock-testcontainers-module:$wiremockTestcontainersVersion")
     testImplementation("org.testcontainers:junit-jupiter:1.19.7")
+
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.12.3")
 }
 
 tasks.test {
