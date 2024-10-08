@@ -3,6 +3,7 @@ package ru.tbank.dto.cbr.valute;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import lombok.Data;
 
+
 @Data
 public class ValuteDTO {
 
@@ -22,5 +23,5 @@ public class ValuteDTO {
     private String value;
 
     @JacksonXmlProperty(localName = "VunitRate")
-    private String vunitRate;
+    private String vUnitRate;
 }
