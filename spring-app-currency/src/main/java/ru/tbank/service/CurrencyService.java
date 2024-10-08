@@ -44,7 +44,7 @@ public class CurrencyService {
 
         for (ValuteDTO valuteDTO : valCursDTO.getValutes()) {
             if (valuteDTO.getCharCode().equals(code)) {
-                return getDoubleRate(valuteDTO.getVunitRate());
+                return getDoubleRate(valuteDTO.getVUnitRate());
             }
         }
 
@@ -98,6 +98,6 @@ public class CurrencyService {
     }
 
     private String getNonexistentCurrencyExceptionMessage(String code) {
-        return "Currency with code \"" + code + "\" doesn't exist";
+        return "Currency with code " + code + " doesn't exist";
     }
 }
