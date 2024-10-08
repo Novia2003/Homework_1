@@ -7,5 +7,4 @@ public class CurrencyConvertResponseDTO {
     private String fromCurrency;
     private String toCurrency;
     private Double convertedAmount;
-
 }
