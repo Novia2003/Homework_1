@@ -1,5 +1,6 @@
-package ru.tbank.controller;
+package ru.tbank.configuration;
 
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,19 +22,33 @@ public class ControllerAdvice {
                 .findFirst()
                 .orElse("Validation failed");
 
-
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorMessageResponse(HttpStatus.BAD_REQUEST.value(), errorMessage)
-        );
+                .body(new ErrorMessageResponse(HttpStatus.BAD_REQUEST.value(), errorMessage));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorMessageResponse> handleConstraintViolationException(ConstraintViolationException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(
+                        new ErrorMessageResponse(
+                                HttpStatus.BAD_REQUEST.value(),
+                                getMessageWithoutMethodName(e.getMessage())
+                        )
+                );
+    }
+
+    private String getMessageWithoutMethodName(String message) {
+        int index = message.indexOf(":");
+        return message.substring(index + 2);
     }
 
     @ExceptionHandler(NonexistentCurrencyException.class)
     public ResponseEntity<ErrorMessageResponse> handleNonexistentCurrencyException(RuntimeException e) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorMessageResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage())
-                );
+                .body(new ErrorMessageResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
     }
 
     @ExceptionHandler(CurrencyRateNotFoundException.class)
