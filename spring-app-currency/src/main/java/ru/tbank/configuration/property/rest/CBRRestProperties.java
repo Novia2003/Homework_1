@@ -1,4 +1,4 @@
-package ru.tbank.configuration.property;
+package ru.tbank.configuration.property.rest;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,8 +10,8 @@ import java.time.Duration;
 @Getter
 @Setter
 @Configuration
-@ConfigurationProperties("rest.kudago")
-public class RestProperties {
+@ConfigurationProperties("rest.cbr")
+public class CBRRestProperties {
     private String url;
     private Duration readTimeout;
     private Duration connectTimeout;

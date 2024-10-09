@@ -44,10 +44,14 @@ public class LocationService {
         repository.delete(id);
     }
 
-    private LocationDTO parseModelToDTO(Location category) {
+    private LocationDTO parseModelToDTO(Location location) {
+        if (location == null) {
+            return null;
+        }
+
         LocationDTO dto = new LocationDTO();
-        dto.setName(category.getName());
-        dto.setSlug(category.getSlug());
+        dto.setName(location.getName());
+        dto.setSlug(location.getSlug());
 
         return dto;
     }
