@@ -7,7 +7,7 @@ rest:
 resilience4j:
   circuitbreaker:
     instances:
-      external-system:
+      cbr:
         registerHealthIndicator: true
         slidingWindowSize: 10
         permittedNumberOfCallsInHalfOpenState: 3
@@ -15,6 +15,11 @@ resilience4j:
         minimumNumberOfCalls: 5
         waitDurationInOpenState: 3600000
         failureRateThreshold: 50
+        recordExceptions:
+          - java.io.IOException
+          - java.util.concurrent.TimeoutException
+        ignoreExceptions:
+          - java.lang.IllegalStateException
 
 cache:
   type: simple

@@ -22,7 +22,7 @@ public class CBRClientImpl implements CBRClient {
 
     private final RestTemplate cbrRestTemplate;
 
-    @CircuitBreaker(name = "external-system", fallbackMethod = "fallbackMethodRate")
+    @CircuitBreaker(name = "cbr", fallbackMethod = "fallbackMethodRate")
     @Cacheable(value = "currencyRates", key = "#root.methodName")
     public ValCursDTO getCurrencyRates() {
         LocalDate date = LocalDate.now();
@@ -32,17 +32,17 @@ public class CBRClientImpl implements CBRClient {
         return cbrRestTemplate.getForObject(DAILY_RATES_URL + "?" + currentDate, ValCursDTO.class);
     }
 
-    @CircuitBreaker(name = "external-system", fallbackMethod = "fallbackMethodCurrencies")
+    @CircuitBreaker(name = "cbr", fallbackMethod = "fallbackMethodCurrencies")
     @Cacheable(value = "currencyRates", key = "#root.methodName")
     public ValuteFullDTO getCurrencies() {
         return cbrRestTemplate.getForObject(ALL_CURRENCIES, ValuteFullDTO.class);
     }
 
     private ValCursDTO fallbackMethodRate(Throwable throwable) {
-        throw new ServiceUnavailableException("Service Unavailable");
+        throw new ServiceUnavailableException("Service Unavailable. Message: " + throwable.getMessage());
     }
 
     private ValuteFullDTO fallbackMethodCurrencies(Throwable throwable) {
-        throw new ServiceUnavailableException("Service Unavailable");
+        throw new ServiceUnavailableException("Service Unavailable. Message: " + throwable.getMessage());
     }
 }
