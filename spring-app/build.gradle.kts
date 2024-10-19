@@ -33,6 +33,10 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter:1.19.7")
 
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.12.3")
+
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+
+    implementation("io.projectreactor:reactor-core:3.6.10")
 }
 
 tasks.test {
