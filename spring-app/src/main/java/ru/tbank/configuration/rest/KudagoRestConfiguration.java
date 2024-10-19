@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 import ru.tbank.configuration.property.rest.KudagoRestProperties;
 
+import java.util.concurrent.Semaphore;
+
 @Configuration
 @RequiredArgsConstructor
 public class KudagoRestConfiguration {
@@ -21,5 +23,12 @@ public class KudagoRestConfiguration {
                 .setConnectTimeout(properties.getConnectTimeout())
                 .setReadTimeout(properties.getReadTimeout())
                 .build();
+    }
+
+    @Bean
+    public Semaphore kudagoSemaphore(
+            KudagoRestProperties properties
+    ) {
+        return new Semaphore(properties.getMaximumNumberConcurrentRequests());
     }
 }

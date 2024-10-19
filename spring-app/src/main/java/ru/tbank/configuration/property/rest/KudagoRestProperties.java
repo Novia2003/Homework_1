@@ -15,4 +15,5 @@ public class KudagoRestProperties {
     private String url;
     private Duration readTimeout;
     private Duration connectTimeout;
+    private Integer maximumNumberConcurrentRequests;
 }
