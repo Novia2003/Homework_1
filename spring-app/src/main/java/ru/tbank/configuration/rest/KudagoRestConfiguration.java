@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 import ru.tbank.configuration.property.rest.KudagoRestProperties;
 
+
 import java.util.concurrent.Semaphore;
 
 @Configuration

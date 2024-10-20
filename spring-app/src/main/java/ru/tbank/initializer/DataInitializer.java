@@ -27,7 +27,6 @@ public class DataInitializer {
     private final KudagoService kudagoService;
 
     private final ExecutorService fixedThreadPool;
-
     private final ScheduledExecutorService scheduledThreadPool;
 
     @EventListener(ApplicationStartedEvent.class)
