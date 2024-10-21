@@ -180,28 +180,29 @@ class CurrencyServiceTest {
     }
 
     private ValuteDTO createValuteDTO(String charCode, String vUnitRate) {
-        ValuteDTO valuteDTO = new ValuteDTO();
-        valuteDTO.setCharCode(charCode);
-        valuteDTO.setVUnitRate(vUnitRate);
-
-        return valuteDTO;
+        return ValuteDTO
+                .builder()
+                .charCode(charCode)
+                .vUnitRate(vUnitRate)
+                .build();
     }
 
     private ItemDTO createItemDTO(String isoCharCode) {
-        ItemDTO itemDTO = new ItemDTO();
-        itemDTO.setIsoCharCode(isoCharCode);
 
-        return itemDTO;
+        return ItemDTO
+                .builder()
+                .isoCharCode(isoCharCode)
+                .build();
     }
 
     private CurrencyConvertRequestDTO createCurrencyConvertRequestDTO(
             String fromCurrency, String toCurrency, double amount
     ) {
-        CurrencyConvertRequestDTO requestDTO = new CurrencyConvertRequestDTO();
-        requestDTO.setFromCurrency(fromCurrency);
-        requestDTO.setToCurrency(toCurrency);
-        requestDTO.setAmount(amount);
 
-        return requestDTO;
+        return CurrencyConvertRequestDTO
+                .builder()
+                .fromCurrency(fromCurrency)
+                .toCurrency(toCurrency)
+                .amount(amount).build();
     }
 }
