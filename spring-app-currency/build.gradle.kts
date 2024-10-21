@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "ru.tbank"
-version = "0.0.1-SNAPSHOT"
+version = "unspecified"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
@@ -31,7 +31,18 @@ dependencies {
     testImplementation("org.wiremock:wiremock-standalone:3.6.0")
     testImplementation("org.wiremock.integrations.testcontainers:wiremock-testcontainers-module:$wiremockTestcontainersVersion")
     testImplementation("org.testcontainers:junit-jupiter:1.19.7")
-    
+
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
+    implementation("io.github.resilience4j:resilience4j-spring-boot3:2.2.0")
+
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+
+    implementation("org.springframework.boot:spring-boot-starter-cache")
+
+
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.12.3")
 }
 
@@ -45,8 +56,8 @@ jacoco {
 
 val jacocoExclusions = listOf(
     "ru/tbank/dto/**",
-    "ru/tbank/model/**",
-    "ru/tbank/configuration/**"
+    "ru/tbank/configuration/**",
+    "ru/tbank/exception/**"
 )
 
 tasks.jacocoTestReport {

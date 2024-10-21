@@ -1,0 +1,28 @@
+rest:
+  cbr:
+    url: https://www.cbr.ru
+    read-timeout: 120s
+    connect-timeout: 120s
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      cbr:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowType: COUNT_BASED
+        minimumNumberOfCalls: 5
+        waitDurationInOpenState: 3600000
+        failureRateThreshold: 50
+        recordExceptions:
+          - java.io.IOException
+          - java.util.concurrent.TimeoutException
+        ignoreExceptions:
+          - java.lang.IllegalStateException
+
+cache:
+  type: simple
+  cache-names: currencyRates, currencies
+  simple:
+    time-to-live: 3600000
