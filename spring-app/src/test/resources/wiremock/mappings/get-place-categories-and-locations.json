@@ -72,6 +72,55 @@
           }
         ]
       }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "url": "/events?fields=title,price,dates,location&actual_since=1729458000"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "count": 2758,
+          "next": "https://kudago.com/public-api/v1.4/events/?actual_since=1729458000&fields=title%2Cprice%2Cdates%2Clocation&page=2",
+          "previous": null,
+          "results": [
+            {
+              "dates": [
+                {
+                  "start": 1643662800,
+                  "end": 1643662800
+                }
+              ],
+              "title": "выставка «Сокровища Древней Греции» в Музее Международного нумизматического клуба",
+              "location": {
+                "slug": "msk"
+              },
+              "price": "от 300 до 550 рублей"
+            },
+            {
+              "dates": [
+                {
+                  "start": 1612386000,
+                  "end": 1677618000
+                },
+                {
+                  "start": 1735676800,
+                  "end": 1735678800
+                }
+              ],
+              "title": "иммерсивная выставка «Алиса в Зазеркалье»",
+              "location": {
+                "slug": "spb"
+              },
+              "price": "350 рублей"
+            }
+          ]
+        }
+      }
     }
   ]
 }

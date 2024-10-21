@@ -3,3 +3,24 @@ rest:
     url: https://kudago.com/public-api/v1.4
     read-timeout: 120s
     connect-timeout: 120s
+    maximum-number-concurrent-requests: 5
+  spring-app-currency:
+    url: ${REST_CURRENCY_URL:http://localhost:8080/currency}
+    read-timeout: 120s
+    connect-timeout: 120s
+
+fixed:
+  thread:
+    pool:
+      size: 10
+
+scheduled:
+  thread:
+    pool:
+      size: 2
+
+initialization:
+  interval: PT1H
+
+server:
+  port: 8081
