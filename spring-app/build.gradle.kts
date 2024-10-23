@@ -38,6 +38,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
     implementation("io.projectreactor:reactor-core:3.6.10")
+
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.liquibase:liquibase-core")
+    runtimeOnly("org.postgresql:postgresql")
 }
 
 tasks.test {
