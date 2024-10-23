@@ -28,11 +28,11 @@ public class CurrencyService {
 
         double rate = getCurrencyRateFromCBR(code);
 
-        CurrencyRateResponseDTO dto = new CurrencyRateResponseDTO();
-        dto.setCurrency(code);
-        dto.setRate(rate);
-
-        return dto;
+        return CurrencyRateResponseDTO
+                .builder()
+                .currency(code)
+                .rate(rate)
+                .build();
     }
 
     private Double getCurrencyRateFromCBR(String code) {
@@ -69,12 +69,12 @@ public class CurrencyService {
 
         double convertedAmount = rateFromCurrency * requestDTO.getAmount() / rateToCurrency;
 
-        CurrencyConvertResponseDTO responseDTO = new CurrencyConvertResponseDTO();
-        responseDTO.setFromCurrency(requestDTO.getFromCurrency());
-        responseDTO.setToCurrency(requestDTO.getToCurrency());
-        responseDTO.setConvertedAmount(convertedAmount);
-
-        return responseDTO;
+        return CurrencyConvertResponseDTO
+                .builder()
+                .fromCurrency(requestDTO.getFromCurrency())
+                .toCurrency(requestDTO.getToCurrency())
+                .convertedAmount(convertedAmount)
+                .build();
     }
 
     private boolean doesSuchCurrencyExist(String code) {
