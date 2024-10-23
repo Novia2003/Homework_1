@@ -8,9 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.tbank.dto.http.ErrorMessageResponse;
-import ru.tbank.exception.CurrencyRateNotFoundException;
-import ru.tbank.exception.NonexistentCurrencyException;
-import ru.tbank.exception.ServiceUnavailableException;
+import ru.tbank.exception.*;
 
 @RestControllerAdvice
 public class ControllerAdvice {
@@ -44,14 +42,18 @@ public class ControllerAdvice {
         return message.substring(index + 2);
     }
 
-    @ExceptionHandler(NonexistentCurrencyException.class)
+    @ExceptionHandler(
+            {NonexistentCurrencyException.class, RelatedEntityNotFoundException.class}
+    )
     public ResponseEntity<ErrorMessageResponse> handleNonexistentCurrencyException(RuntimeException e) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorMessageResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
     }
 
-    @ExceptionHandler(CurrencyRateNotFoundException.class)
+    @ExceptionHandler(
+            {CurrencyRateNotFoundException.class, EntityNotFoundException.class}
+    )
     public ResponseEntity<ErrorMessageResponse> handleCurrencyRateNotFoundException(RuntimeException e) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
