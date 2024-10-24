@@ -25,8 +25,9 @@ dependencies {
     implementation("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
 
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-
+    testImplementation("org.testcontainers:postgresql:1.20.2")
     testImplementation("io.rest-assured:rest-assured")
     testImplementation("org.wiremock:wiremock-standalone:3.6.0")
     testImplementation("org.wiremock.integrations.testcontainers:wiremock-testcontainers-module:$wiremockTestcontainersVersion")
