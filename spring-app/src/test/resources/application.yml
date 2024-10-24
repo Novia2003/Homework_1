@@ -27,9 +27,11 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/fj
-    username: postgres
-    password: 1234
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:tc:postgresql:11.1://test_db
+    username: test
+    password: test
+  jpa:
+    hibernate:
+      ddl-auto: update
   liquibase:
-    change-log: classpath:/db/changelog/db.changelog-master.xml
+    enabled: false

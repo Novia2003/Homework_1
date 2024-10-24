@@ -10,10 +10,9 @@ import java.time.Duration;
 @Getter
 @Setter
 @Configuration
-@ConfigurationProperties("rest.kudago")
-public class KudagoRestProperties {
+@ConfigurationProperties("rest.spring-app-currency")
+public class CurrencyRestProperties {
     private String url;
     private Duration readTimeout;
     private Duration connectTimeout;
-    private Integer maximumNumberConcurrentRequests;
 }

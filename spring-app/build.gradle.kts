@@ -25,14 +25,23 @@ dependencies {
     implementation("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
 
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-
+    testImplementation("org.testcontainers:postgresql:1.20.2")
     testImplementation("io.rest-assured:rest-assured")
     testImplementation("org.wiremock:wiremock-standalone:3.6.0")
     testImplementation("org.wiremock.integrations.testcontainers:wiremock-testcontainers-module:$wiremockTestcontainersVersion")
     testImplementation("org.testcontainers:junit-jupiter:1.19.7")
-    
+
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.12.3")
+
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+
+    implementation("io.projectreactor:reactor-core:3.6.10")
+
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.liquibase:liquibase-core")
+    runtimeOnly("org.postgresql:postgresql")
 }
 
 tasks.test {

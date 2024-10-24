@@ -5,31 +5,21 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
-import ru.tbank.configuration.property.rest.KudagoRestProperties;
-
-
-import java.util.concurrent.Semaphore;
+import ru.tbank.configuration.property.rest.CurrencyRestProperties;
 
 @Configuration
 @RequiredArgsConstructor
-public class KudagoRestConfiguration {
+public class CurrencyRestConfiguration {
 
     @Bean
-    public RestTemplate kudagoRestTemplate(
+    public RestTemplate currencyRestTemplate(
             RestTemplateBuilder restTemplateBuilder,
-            KudagoRestProperties properties
+            CurrencyRestProperties properties
     ) {
         return restTemplateBuilder
                 .rootUri(properties.getUrl())
                 .setConnectTimeout(properties.getConnectTimeout())
                 .setReadTimeout(properties.getReadTimeout())
                 .build();
-    }
-
-    @Bean
-    public Semaphore kudagoSemaphore(
-            KudagoRestProperties properties
-    ) {
-        return new Semaphore(properties.getMaximumNumberConcurrentRequests());
     }
 }
