@@ -1,12 +1,13 @@
 package org.example.customLinkedList;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
 public class CustomLinkedListDemo {
 
-    public void demonstrateCustomLinkedList() {
+    public static void demonstrateCustomLinkedList() {
         CustomLinkedList<String> list = new CustomLinkedList<>();
 
         list.add("Олег");
@@ -45,5 +46,16 @@ public class CustomLinkedListDemo {
         for (int i = 0; i < customLinkedList.size(); i++) {
             System.out.println(customLinkedList.get(i));
         }
+
+        System.out.println("\nДемонстрация работы итератора:");
+        Iterator<Integer> iterator = customLinkedList.iterator();
+
+        System.out.println("Первый элемент списка с использованием итератора (hasNext() и next()):");
+        if (iterator.hasNext()) {
+            System.out.println(iterator.next());
+        }
+
+        System.out.println("\nДемонстрация метода forEachRemaining:");
+        iterator.forEachRemaining(System.out::println);
     }
 }
