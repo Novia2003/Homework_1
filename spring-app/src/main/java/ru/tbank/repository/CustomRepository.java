@@ -1,10 +1,12 @@
 package ru.tbank.repository;
 
+import ru.tbank.pattern.observer.Observer;
+
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class CustomRepository<T> {
+public class CustomRepository<T> implements Observer<T> {
 
     private final ConcurrentHashMap<Long, T> storage = new ConcurrentHashMap<>();
 
@@ -31,5 +33,10 @@ public class CustomRepository<T> {
 
     public void delete(Long id) {
         storage.remove(id);
+    }
+
+    @Override
+    public void update(T model) {
+        save(model);
     }
 }
