@@ -48,6 +48,10 @@ public class CategoryService extends ObservableImpl<Category> {
         repository.delete(id);
     }
 
+    public void restore() {
+        repository.restore();
+    }
+
     private CategoryDTO parseModelToDTO(Category category) {
         if (category == null) {
             return null;

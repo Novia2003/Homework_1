@@ -48,6 +48,10 @@ public class LocationService extends ObservableImpl<Location> {
         repository.delete(id);
     }
 
+    public void restore() {
+        repository.restore();
+    }
+
     private LocationDTO parseModelToDTO(Location location) {
         if (location == null) {
             return null;
