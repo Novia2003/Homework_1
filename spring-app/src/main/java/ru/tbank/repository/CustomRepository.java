@@ -5,9 +5,7 @@ import ru.tbank.repository.memento.StorageChange;
 import ru.tbank.repository.memento.TypeStorageChange;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.NoSuchElementException;
-import java.util.Stack;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -17,13 +15,13 @@ public class CustomRepository<T> implements Observer<T> {
 
     private final AtomicLong idCounter = new AtomicLong(1);
 
-    private final Stack<StorageChange<T>> storageChanges = new Stack<>();
+    private final Deque<StorageChange<T>> storageChanges = new ArrayDeque<>();
 
     public Long save(T model) {
         Long id = idCounter.getAndIncrement();
         storage.put(id, model);
 
-        storageChanges.add(
+        storageChanges.push(
                 StorageChange
                         .<T>builder()
                         .id(id)
@@ -47,7 +45,7 @@ public class CustomRepository<T> implements Observer<T> {
     public void update(Long id, T updatedModel) {
         T model = findById(id);
 
-        storageChanges.add(
+        storageChanges.push(
                 StorageChange
                         .<T>builder()
                         .id(id)
@@ -63,7 +61,7 @@ public class CustomRepository<T> implements Observer<T> {
     public void delete(Long id) {
         T model = findById(id);
 
-        storageChanges.add(
+        storageChanges.push(
                 StorageChange
                         .<T>builder()
                         .id(id)
