@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.tbank.dto.http.ErrorMessageResponse;
 import ru.tbank.exception.*;
 
+import java.util.NoSuchElementException;
+
 @RestControllerAdvice
 public class ControllerAdvice {
 
@@ -52,7 +54,7 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler(
-            {CurrencyRateNotFoundException.class, EntityNotFoundException.class}
+            {CurrencyRateNotFoundException.class, EntityNotFoundException.class, NoSuchElementException.class}
     )
     public ResponseEntity<ErrorMessageResponse> handleCurrencyRateNotFoundException(RuntimeException e) {
         return ResponseEntity

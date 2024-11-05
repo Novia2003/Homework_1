@@ -1,7 +1,9 @@
 package org.example.customLinkedList;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.function.Consumer;
 
 public class CustomLinkedList<T> {
 
@@ -140,6 +142,45 @@ public class CustomLinkedList<T> {
 
     public int size() {
         return size;
+    }
+
+    public Iterator<T> iterator() {
+        return new CustomIterator<>();
+    }
+
+    private class CustomIterator<E> implements Iterator<E> {
+
+        private Node<E> currentElement;
+
+        private int currentIndex;
+
+        public CustomIterator() {
+            currentElement = (Node<E>) head;
+            currentIndex = 0;
+        }
+
+        public boolean hasNext() {
+            return currentIndex < size();
+        }
+
+        public E next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException("There are no more elements");
+            }
+
+            E element = currentElement.element;
+
+            currentElement = currentElement.next;
+            currentIndex++;
+
+            return element;
+        }
+
+        public void forEachRemaining(Consumer<? super E> action) {
+            while (hasNext()) {
+                action.accept(next());
+            }
+        }
     }
 
     private static class Node<T> {

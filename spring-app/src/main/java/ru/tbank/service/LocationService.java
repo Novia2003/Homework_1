@@ -1,20 +1,24 @@
 package ru.tbank.service;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.tbank.dto.location.LocationDTO;
 import ru.tbank.dto.location.LocationKudagoResponseDTO;
 import ru.tbank.model.Location;
+import ru.tbank.pattern.observer.impl.ObservableImpl;
 import ru.tbank.repository.CustomRepository;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
-public class LocationService {
+public class LocationService extends ObservableImpl<Location> {
 
     private final CustomRepository<Location> repository;
+
+    public LocationService(CustomRepository<Location> repository) {
+        this.repository = repository;
+        addObserver(repository);
+    }
 
     public Collection<LocationDTO> getAllLocations() {
         return repository
@@ -33,7 +37,7 @@ public class LocationService {
     }
 
     public void createLocation(LocationKudagoResponseDTO dto) {
-        repository.save(parseKudagoResponseDTOToModel(dto));
+        notifyObservers(parseKudagoResponseDTOToModel(dto));
     }
 
     public void updateLocation(Long id, LocationDTO dto) {
@@ -42,6 +46,10 @@ public class LocationService {
 
     public void deleteLocation(Long id) {
         repository.delete(id);
+    }
+
+    public void restore() {
+        repository.restore();
     }
 
     private LocationDTO parseModelToDTO(Location location) {

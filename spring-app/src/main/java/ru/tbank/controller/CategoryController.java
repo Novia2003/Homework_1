@@ -48,4 +48,9 @@ public class CategoryController {
     public void deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
     }
+
+    @PostMapping("/restore")
+    public void restore() {
+        categoryService.restore();
+    }
 }

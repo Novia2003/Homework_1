@@ -45,4 +45,9 @@ public class LocationController {
     public void deleteLocation(@PathVariable Long id) {
         locationService.deleteLocation(id);
     }
+
+    @PostMapping("/restore")
+    public void restore() {
+        locationService.restore();
+    }
 }
