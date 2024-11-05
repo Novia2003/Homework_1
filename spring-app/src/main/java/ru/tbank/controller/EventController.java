@@ -1,13 +1,13 @@
 package ru.tbank.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import ru.tbank.dto.event.EventDTO;
+import ru.tbank.dto.event.EventDetailsDTO;
 import ru.tbank.dto.event.EventRequestDTO;
 import ru.tbank.dto.event.EventResponseDTO;
 import ru.tbank.service.EventService;
@@ -69,5 +69,50 @@ public class EventController {
         Flux<EventResponseDTO> eventsFlux = eventService.getEventsByMonoAndFlux(request);
 
         return Mono.just(ResponseEntity.ok(eventsFlux));
+    }
+
+    @GetMapping
+    public List<EventDTO> getAllEvents() {
+        return eventService.getAllEvents();
+    }
+
+    @GetMapping("/{id}")
+    public EventDTO getEventById(@PathVariable Long id) {
+        return eventService.getEventById(id);
+    }
+
+    @GetMapping("/filter")
+    public List<EventDTO> getEvents(
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "place", required = false) String placeName,
+            @RequestParam(value = "fromDate", required = false) LocalDate fromDate,
+            @RequestParam(value = "toDate", required = false) LocalDate toDate
+    ) {
+        return eventService.getEvents(name, placeName, fromDate, toDate);
+    }
+
+    @PostMapping
+    public EventDTO createEvent(
+            @Valid
+            @RequestBody
+            EventDetailsDTO eventDetails
+    ) {
+        return eventService.createEvent(eventDetails);
+    }
+
+    @PutMapping("/{id}")
+    public EventDTO updateEvent(
+            @PathVariable
+            Long id,
+            @Valid
+            @RequestBody
+            EventDetailsDTO eventDetails
+    ) {
+        return eventService.updateEvent(id, eventDetails);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteEvent(@PathVariable Long id) {
+        eventService.deleteEvent(id);
     }
 }
