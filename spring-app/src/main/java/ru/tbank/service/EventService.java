@@ -14,6 +14,7 @@ import java.time.*;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,11 +29,12 @@ public class EventService {
     private final CurrencyService currencyService;
 
     public CompletableFuture<List<EventResponseDTO>> getEventsByCompletableFuture(EventRequestDTO request) {
-        LocalDate dateFrom = request.getDateFrom() != null ?
-                request.getDateFrom() : LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate dateFrom = Optional.ofNullable(request.getDateFrom())
+                .orElseGet(() -> LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)));
 
-        LocalDate dateTo = request.getDateTo() != null ?
-                request.getDateTo() : LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        LocalDate dateTo = Optional.ofNullable(request.getDateTo())
+                .orElseGet(() -> LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)));
+
 
         long dateFromTimestamp = dateFrom.atStartOfDay().toEpochSecond(ZoneOffset.UTC);
         long dateToTimestamp = dateTo.atStartOfDay().plusDays(1).toEpochSecond(ZoneOffset.UTC);
@@ -59,11 +61,11 @@ public class EventService {
     }
 
     public Flux<EventResponseDTO> getEventsByMonoAndFlux(EventRequestDTO request) {
-        LocalDate dateFrom = request.getDateFrom() != null ?
-                request.getDateFrom() : LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate dateFrom = Optional.ofNullable(request.getDateFrom())
+                .orElseGet(() -> LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)));
 
-        LocalDate dateTo = request.getDateTo() != null ?
-                request.getDateTo() : LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        LocalDate dateTo = Optional.ofNullable(request.getDateTo())
+                .orElseGet(() -> LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)));
 
         long dateFromTimestamp = dateFrom.atStartOfDay().toEpochSecond(ZoneOffset.UTC);
         long dateToTimestamp = dateTo.atStartOfDay().plusDays(1).toEpochSecond(ZoneOffset.UTC);
