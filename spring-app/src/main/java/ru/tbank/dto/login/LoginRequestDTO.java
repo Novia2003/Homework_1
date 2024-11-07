@@ -3,10 +3,12 @@ package ru.tbank.dto.login;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class LoginDTO {
+@NoArgsConstructor
+public class LoginRequestDTO {
 
     @NotNull
     private String username;
