@@ -7,4 +7,5 @@
     <include file="V1__create_places_table.sql"/>
     <include file="V2__create_events_table.sql"/>
     <include file="V3__create_users_table.sql"/>
+    <include file="V4__add_token_and_time_in_users.sql"/>
 </databaseChangeLog>
