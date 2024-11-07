@@ -1,13 +1,14 @@
 package ru.tbank.controller;
 
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.tbank.dto.login.LoginDTO;
+import ru.tbank.dto.login.LoginRequestDTO;
+import ru.tbank.dto.login.TokenResponseDTO;
 import ru.tbank.dto.registration.RegistrationDTO;
 import ru.tbank.dto.reset.PasswordResetDTO;
 import ru.tbank.service.AuthService;
@@ -30,25 +31,32 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(
-            @RequestBody LoginDTO loginDTO,
-            HttpServletResponse response
+    public TokenResponseDTO login(
+            @RequestBody LoginRequestDTO loginRequestDTO
     ) {
-        authService.authenticate(loginDTO, response);
-        return "Login successful";
+         return authService.authenticate(loginRequestDTO);
     }
 
     @PostMapping("/logout")
-    public String logout(HttpServletResponse response) {
-        authService.logout(response);
+    public String logout(
+            HttpServletRequest request
+    ) {
+        authService.logout(request);
         return "Logout successful!";
     }
 
+    @PostMapping("/send-verification-code")
+    public String sendVerificationCode(
+            HttpServletRequest request
+    ) {
+        authService.sendVerificationCode(request);
+        return "Verification code sent successfully!";
+    }
+
     @PostMapping("/reset-password")
-    public String resetPassword(
+    public TokenResponseDTO resetPassword(
             @RequestBody PasswordResetDTO passwordResetDTO
     ) {
-        authService.resetPassword(passwordResetDTO);
-        return "Password reset successful!";
+        return authService.resetPassword(passwordResetDTO);
     }
 }

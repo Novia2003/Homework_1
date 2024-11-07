@@ -20,7 +20,6 @@ public class SecurityConfig {
 
     private final AuthenticationProvider authenticationProvider;
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -31,6 +30,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/auth/login").permitAll()
                 .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
                 .requestMatchers("/api/v1/auth/logout").hasAuthority("USER")
+                .requestMatchers("/api/v1/auth/send-verification-code").hasAuthority("USER")
                 .requestMatchers("/api/v1/auth/reset-password").hasAuthority("USER")
                 .requestMatchers("/api/v1/places/**").hasAuthority("USER")
                 .requestMatchers("/api/v1/events/**").hasAuthority("USER")
@@ -46,5 +46,3 @@ public class SecurityConfig {
         return http.build();
     }
 }
-
-

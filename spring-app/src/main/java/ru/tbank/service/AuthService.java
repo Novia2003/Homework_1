@@ -1,13 +1,14 @@
 package ru.tbank.service;
 
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.tbank.dto.login.LoginDTO;
+import ru.tbank.dto.login.LoginRequestDTO;
+import ru.tbank.dto.login.TokenResponseDTO;
 import ru.tbank.dto.registration.RegistrationDTO;
 import ru.tbank.dto.reset.PasswordResetDTO;
 import ru.tbank.entity.Role;
@@ -15,6 +16,10 @@ import ru.tbank.entity.UserEntity;
 import ru.tbank.exception.UserAlreadyExistsException;
 import ru.tbank.exception.VerificationCodeException;
 import ru.tbank.repository.UserRepository;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,39 +48,75 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    public void logout(HttpServletResponse response) {
-        response.setHeader("Authorization", "");
-    }
-
-    public void authenticate(LoginDTO loginDTO, HttpServletResponse response) {
-        if (!userRepository.existsByUsername(loginDTO.getUsername())) {
+    public TokenResponseDTO authenticate(LoginRequestDTO loginRequestDTO) {
+        Optional<UserEntity> userOptional = userRepository.findByUsername(loginRequestDTO.getUsername());
+        if (userOptional.isEmpty()) {
             throw new UsernameNotFoundException("User with that name has not been registered!");
         }
+
+        UserEntity user = userOptional.get();
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginDTO.getUsername(),
-                        loginDTO.getPassword()
+                        loginRequestDTO.getUsername(),
+                        loginRequestDTO.getPassword()
                 )
         );
 
-        var user = userRepository.findByUsername(loginDTO.getUsername());
+        String token = jwtService.generateToken(user, loginRequestDTO.isRememberMe());
+        user.setToken(token);
+        userRepository.save(user);
 
-        String token = jwtService.generateToken(user, loginDTO.isRememberMe());
-        response.setHeader("Authorization", "Bearer " + token);
+        return new TokenResponseDTO(token);
     }
 
-    public void resetPassword(PasswordResetDTO passwordResetDTO) {
-        if (!userRepository.existsByUsername(passwordResetDTO.getUsername())) {
+    public void logout(HttpServletRequest request) {
+        UserEntity user = getUserByJWT(request);
+        user.setToken(null);
+
+        userRepository.save(user);
+    }
+
+    public void sendVerificationCode(HttpServletRequest request) {
+        UserEntity user = getUserByJWT(request);
+        user.setTimeSendingVerificationCode(Instant.now());
+
+        userRepository.save(user);
+    }
+
+    public TokenResponseDTO resetPassword(PasswordResetDTO passwordResetDTO) {
+        Optional<UserEntity> userOptional = userRepository.findByUsername(passwordResetDTO.getUsername());
+        if (userOptional.isEmpty()) {
             throw new UsernameNotFoundException("User with that name has not been registered!");
         }
 
-        if (VERIFICATION_CODE.equals(passwordResetDTO.getVerificationCode())) {
-            var user = userRepository.findByUsername(passwordResetDTO.getUsername());
+        UserEntity user = userOptional.get();
+
+        Instant currentInstant = Instant.now();
+
+        Duration duration = Duration.between(user.getTimeSendingVerificationCode(), currentInstant);
+
+        if (Math.abs(duration.toMinutes()) <= 1 &&
+                VERIFICATION_CODE.equals(passwordResetDTO.getVerificationCode())) {
+            user.setTimeSendingVerificationCode(null);
             user.setPassword(passwordEncoder.encode(passwordResetDTO.getNewPassword()));
+
+            String token = jwtService.generateToken(user, false);
+            user.setToken(token);
+
             userRepository.save(user);
+            return new TokenResponseDTO(token);
         } else {
             throw new VerificationCodeException("Verification code is incorrect");
         }
+    }
+
+    private UserEntity getUserByJWT(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        String jwt = authHeader.substring(7);
+        String username = jwtService.extractUsername(jwt);
+
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }
