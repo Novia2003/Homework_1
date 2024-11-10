@@ -73,7 +73,7 @@ class LocationServiceTest {
         locationService.createLocation(dto);
 
         ArgumentCaptor<Location> locationCaptor = ArgumentCaptor.forClass(Location.class);
-        verify(repository).save(locationCaptor.capture());
+        verify(repository).update(locationCaptor.capture());
 
         List<Location> capturedLocations = locationCaptor.getAllValues();
         assertEquals(1, capturedLocations.size());

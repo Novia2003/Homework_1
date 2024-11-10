@@ -75,7 +75,7 @@ class CategoryServiceTest {
         categoryService.createCategory(dto);
 
         ArgumentCaptor<Category> categoryCaptor = ArgumentCaptor.forClass(Category.class);
-        verify(repository).save(categoryCaptor.capture());
+        verify(repository).update(categoryCaptor.capture());
 
         List<Category> capturedCategories = categoryCaptor.getAllValues();
         assertEquals(1, capturedCategories.size());
