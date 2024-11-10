@@ -60,7 +60,12 @@ jacoco {
 val jacocoExclusions = listOf(
     "ru/tbank/dto/**",
     "ru/tbank/model/**",
-    "ru/tbank/configuration/**"
+    "ru/tbank/configuration/**",
+    "ru/tbank/auth/**",
+    "ru/tbank/entity/**",
+    "ru/tbank/pattern/**",
+    "ru/tbank/exception/**",
+    "ru/tbank/repository/**"
 )
 
 tasks.jacocoTestReport {
