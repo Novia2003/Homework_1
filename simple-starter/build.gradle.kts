@@ -1,6 +1,5 @@
 plugins {
     id("java")
-    id("org.springframework.boot") version "3.0.0"
     id("io.spring.dependency-management") version "1.0.13.RELEASE"
 }
 
@@ -16,10 +15,10 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 
-    implementation("org.projectlombok:lombok")
-    annotationProcessor("org.projectlombok:lombok")
+    implementation("org.projectlombok:lombok:1.18.24")
+    annotationProcessor("org.projectlombok:lombok:1.18.24")
 
-    implementation("org.springframework.boot:spring-boot-starter-aop")
+    implementation("org.springframework.boot:spring-boot-starter-aop:3.0.0")
 }
 
 tasks.test {
