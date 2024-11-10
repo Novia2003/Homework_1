@@ -1,7 +1,7 @@
 package ru.tbank.initializer;
 
 import lombok.RequiredArgsConstructor;
-import ru.tbank.pattern.observer.command.Command;
+import ru.tbank.pattern.command.Command;
 
 import java.util.concurrent.ExecutorService;
 
