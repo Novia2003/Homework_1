@@ -37,7 +37,12 @@ jobs:
             gradle-${{ runner.os }}-
 
       - name: Build and run tests
-        run: ./gradlew :${{ matrix.module }}:clean :${{ matrix.module }}:build :${{ matrix.module }}:test
+        run: |
+          if [ "${{ matrix.module }}" == "" ]; then
+            ./gradlew clean build test
+          else
+            ./gradlew :${{ matrix.module }}:clean :${{ matrix.module }}:build :${{ matrix.module }}:test
+          fi
 
       - name: Generate test coverage report
         if: matrix.module == ''
