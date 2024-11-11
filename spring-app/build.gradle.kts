@@ -3,6 +3,12 @@ plugins {
     id("org.springframework.boot") version "3.0.0"
     id("io.spring.dependency-management") version "1.0.13.RELEASE"
     id("jacoco")
+    id("checkstyle")
+}
+
+checkstyle {
+    toolVersion = "10.3.4"
+    configFile = file("config/checkstyle/checkstyle.xml")
 }
 
 group = "ru.tbank"
@@ -82,6 +88,13 @@ tasks.jacocoTestReport {
     reports {
         xml.required.set(true)
         csv.required.set(true)
+        html.required.set(true)
+    }
+}
+
+tasks.withType<Checkstyle> {
+    reports {
+        xml.required.set(true)
         html.required.set(true)
     }
 }
