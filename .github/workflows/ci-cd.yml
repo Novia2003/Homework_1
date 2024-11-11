@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        module: [":", ":app", ":simple-starter", ":spring-app", ":spring-app-currency"]
+        module: ["", "app", "simple-starter", "spring-app", "spring-app-currency"]
 
     steps:
       - name: Checkout code
@@ -37,15 +37,15 @@ jobs:
             gradle-${{ runner.os }}-
 
       - name: Build and run tests
-        run: ./gradlew ${{ matrix.module }}:clean ${{ matrix.module }}:build ${{ matrix.module }}:test
+        run: ./gradlew :${{ matrix.module }}:clean :${{ matrix.module }}:build :${{ matrix.module }}:test
 
       - name: Generate test coverage report
-        if: matrix.module == ':'
+        if: matrix.module == ''
         run: ./gradlew jacocoTestReport
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v3
-        if: matrix.module == ':'
+        if: matrix.module == ''
         with:
           name: coverage-report
           path: build/reports/jacoco/test/html
@@ -55,7 +55,7 @@ jobs:
 
       - name: Upload Checkstyle report
         uses: actions/upload-artifact@v3
-        if: matrix.module == ':'
+        if: matrix.module == ''
         with:
           name: checkstyle-report
           path: build/reports/checkstyle
