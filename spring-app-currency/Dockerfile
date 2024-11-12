@@ -5,7 +5,7 @@ RUN --mount=type=cache,target=/root/.gradle  chmod +x gradlew && ./gradlew clean
 
 FROM amazoncorretto:17-alpine AS layers
 WORKDIR /application
-COPY --from=builder /application/build/libs/*.jar app.jar
+COPY --from=builder /application/spring-app-currency/build/libs/*.jar app.jar
 RUN java -Djarmode=layertools -jar app.jar extract
 
 FROM amazoncorretto:17-alpine
