@@ -90,5 +90,5 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t ghcr.io/novia2003/homework_1-${{ matrix.module }}:latest ${{ matrix.module }}/Dockerfile .
+          docker build -t ghcr.io/novia2003/homework_1-${{ matrix.module }}:latest -f ${{ matrix.module }}/Dockerfile .
           docker push ghcr.io/novia2003/homework_1-${{ matrix.module }}:latest
