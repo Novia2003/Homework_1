@@ -15,8 +15,7 @@ repositories {
 }
 
 checkstyle {
-    toolVersion = "10.3.4"
-    configFile = file("config/checkstyle/checkstyle.xml")
+    toolVersion = "10.20.1"
 }
 
 
@@ -81,13 +80,6 @@ tasks.jacocoTestReport {
     reports {
         xml.required.set(true)
         csv.required.set(true)
-        html.required.set(true)
-    }
-}
-
-tasks.withType<Checkstyle> {
-    reports {
-        xml.required.set(true)
         html.required.set(true)
     }
 }
