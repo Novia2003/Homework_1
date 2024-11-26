@@ -4,6 +4,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -45,7 +46,12 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler(
-            {NonexistentCurrencyException.class, RelatedEntityNotFoundException.class}
+            {
+                    NonexistentCurrencyException.class,
+                    RelatedEntityNotFoundException.class,
+                    VerificationCodeException.class,
+                    UserAlreadyExistsException.class
+            }
     )
     public ResponseEntity<ErrorMessageResponse> handleNonexistentCurrencyException(RuntimeException e) {
         return ResponseEntity
@@ -54,7 +60,12 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler(
-            {CurrencyRateNotFoundException.class, EntityNotFoundException.class, NoSuchElementException.class}
+            {
+                    CurrencyRateNotFoundException.class,
+                    EntityNotFoundException.class,
+                    NoSuchElementException.class,
+                    UsernameNotFoundException.class
+            }
     )
     public ResponseEntity<ErrorMessageResponse> handleCurrencyRateNotFoundException(RuntimeException e) {
         return ResponseEntity
