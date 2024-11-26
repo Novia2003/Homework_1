@@ -2,10 +2,12 @@ package ru.tbank.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.tbank.auth.JwtAuthenticationFilter;
 import ru.tbank.dto.location.LocationDTO;
 import ru.tbank.service.LocationService;
 
@@ -20,6 +22,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest({LocationController.class})
 public class LocationControllerTest {
 
@@ -28,6 +31,9 @@ public class LocationControllerTest {
 
     @MockBean
     private LocationService locationService;
+
+    @MockBean
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Test
     public void getAllLocations() throws Exception {

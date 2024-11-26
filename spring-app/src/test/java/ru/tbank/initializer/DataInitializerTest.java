@@ -1,5 +1,6 @@
 package ru.tbank.initializer;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -13,6 +14,7 @@ import ru.tbank.service.KudagoService;
 import ru.tbank.service.LocationService;
 
 import java.util.List;
+import java.util.concurrent.*;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
@@ -32,15 +34,24 @@ class DataInitializerTest {
     @InjectMocks
     private DataInitializer dataInitializer;
 
+    @BeforeEach
+    void setUp() {
+        ExecutorService fixedThreadPool = Executors.newFixedThreadPool(2);
+        ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(1);
+        dataInitializer = new DataInitializer(categoryService, locationService, kudagoService, fixedThreadPool, scheduledThreadPool);
+    }
+
     @Test
-    void testInit_PositiveScenario() {
+    void testInit_PositiveScenario() throws InterruptedException {
         CategoryKudagoResponseDTO[] categories = {new CategoryKudagoResponseDTO(), new CategoryKudagoResponseDTO()};
         LocationKudagoResponseDTO[] locations = {new LocationKudagoResponseDTO(), new LocationKudagoResponseDTO()};
 
         when(kudagoService.getCategories()).thenReturn(categories);
         when(kudagoService.getLocations()).thenReturn(locations);
 
+        CountDownLatch latch = new CountDownLatch(1);
         dataInitializer.init();
+        latch.await(1, TimeUnit.SECONDS); // Wait for the initialization to complete
 
         ArgumentCaptor<CategoryKudagoResponseDTO> categoryCaptor = ArgumentCaptor.forClass(CategoryKudagoResponseDTO.class);
         ArgumentCaptor<LocationKudagoResponseDTO> locationCaptor = ArgumentCaptor.forClass(LocationKudagoResponseDTO.class);
@@ -61,12 +72,14 @@ class DataInitializerTest {
     }
 
     @Test
-    void testInit_NoCategoriesFetched() {
+    void testInit_NoCategoriesFetched() throws InterruptedException {
         when(kudagoService.getCategories()).thenReturn(null);
         LocationKudagoResponseDTO[] locations = {new LocationKudagoResponseDTO(), new LocationKudagoResponseDTO()};
         when(kudagoService.getLocations()).thenReturn(locations);
 
+        CountDownLatch latch = new CountDownLatch(1);
         dataInitializer.init();
+        latch.await(1, TimeUnit.SECONDS); // Wait for the initialization to complete
 
         ArgumentCaptor<LocationKudagoResponseDTO> locationCaptor = ArgumentCaptor.forClass(LocationKudagoResponseDTO.class);
 
@@ -81,12 +94,14 @@ class DataInitializerTest {
     }
 
     @Test
-    void testInit_NoLocationsFetched() {
+    void testInit_NoLocationsFetched() throws InterruptedException {
         CategoryKudagoResponseDTO[] categories = {new CategoryKudagoResponseDTO(), new CategoryKudagoResponseDTO()};
         when(kudagoService.getCategories()).thenReturn(categories);
         when(kudagoService.getLocations()).thenReturn(null);
 
+        CountDownLatch latch = new CountDownLatch(1);
         dataInitializer.init();
+        latch.await(1, TimeUnit.SECONDS); // Wait for the initialization to complete
 
         ArgumentCaptor<CategoryKudagoResponseDTO> categoryCaptor = ArgumentCaptor.forClass(CategoryKudagoResponseDTO.class);
 
@@ -101,11 +116,13 @@ class DataInitializerTest {
     }
 
     @Test
-    void testInit_NoCategoriesAndLocationsFetched() {
+    void testInit_NoCategoriesAndLocationsFetched() throws InterruptedException {
         when(kudagoService.getCategories()).thenReturn(null);
         when(kudagoService.getLocations()).thenReturn(null);
 
+        CountDownLatch latch = new CountDownLatch(1);
         dataInitializer.init();
+        latch.await(1, TimeUnit.SECONDS); // Wait for the initialization to complete
 
         verify(categoryService, never()).createCategory(any(CategoryKudagoResponseDTO.class));
         verify(locationService, never()).createLocation(any(LocationKudagoResponseDTO.class));

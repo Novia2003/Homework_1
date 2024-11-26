@@ -3,6 +3,7 @@ plugins {
     id("org.springframework.boot") version "3.0.0"
     id("io.spring.dependency-management") version "1.0.13.RELEASE"
     id("jacoco")
+    id("checkstyle")
 }
 
 group = "ru.tbank"
@@ -12,6 +13,11 @@ java.sourceCompatibility = JavaVersion.VERSION_17
 repositories {
     mavenCentral()
 }
+
+checkstyle {
+    toolVersion = "10.20.1"
+}
+
 
 val wiremockTestcontainersVersion: String by extra("1.0-alpha-13")
 

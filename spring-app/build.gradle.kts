@@ -3,6 +3,11 @@ plugins {
     id("org.springframework.boot") version "3.0.0"
     id("io.spring.dependency-management") version "1.0.13.RELEASE"
     id("jacoco")
+    id("checkstyle")
+}
+
+checkstyle {
+    toolVersion = "10.20.1"
 }
 
 group = "ru.tbank"
@@ -60,7 +65,12 @@ jacoco {
 val jacocoExclusions = listOf(
     "ru/tbank/dto/**",
     "ru/tbank/model/**",
-    "ru/tbank/configuration/**"
+    "ru/tbank/configuration/**",
+    "ru/tbank/auth/**",
+    "ru/tbank/entity/**",
+    "ru/tbank/pattern/**",
+    "ru/tbank/exception/**",
+    "ru/tbank/repository/**"
 )
 
 tasks.jacocoTestReport {

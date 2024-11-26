@@ -3,7 +3,7 @@ package ru.tbank.initializer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.tbank.dto.location.LocationKudagoResponseDTO;
-import ru.tbank.pattern.observer.command.Command;
+import ru.tbank.pattern.command.Command;
 import ru.tbank.service.KudagoService;
 import ru.tbank.service.LocationService;
 
