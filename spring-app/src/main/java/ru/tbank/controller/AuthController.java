@@ -13,6 +13,7 @@ import ru.tbank.dto.login.LoginRequestDTO;
 import ru.tbank.dto.login.TokenResponseDTO;
 import ru.tbank.dto.registration.RegistrationDTO;
 import ru.tbank.dto.reset.PasswordResetDTO;
+import ru.tbank.metric.CustomMetric;
 import ru.tbank.service.AuthService;
 
 @Slf4j
@@ -22,6 +23,8 @@ import ru.tbank.service.AuthService;
 public class AuthController {
 
     private final AuthService authService;
+
+    private final CustomMetric customMetric;
 
     @PostMapping("/register")
     public String register(
@@ -51,6 +54,8 @@ public class AuthController {
 
         log.info("Login successful");
         MDC.clear();
+
+        customMetric.increment();
 
         return tokenResponseDTO;
     }
