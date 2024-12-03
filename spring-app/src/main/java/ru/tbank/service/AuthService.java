@@ -2,6 +2,7 @@ package ru.tbank.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,6 +22,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -36,7 +38,9 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public void register(RegistrationDTO registrationDTO) {
+        log.info("Starting registration process");
         if (userRepository.existsByUsername(registrationDTO.getUsername())) {
+            log.warn("User already exists");
             throw new UserAlreadyExistsException("User with that name has already been registered!");
         }
 
@@ -46,9 +50,11 @@ public class AuthService {
         user.setRole(Role.USER);
 
         userRepository.save(user);
+        log.info("Registration successful");
     }
 
     public TokenResponseDTO authenticate(LoginRequestDTO loginRequestDTO) {
+        log.info("Starting authentication process");
         Optional<UserEntity> userOptional = userRepository.findByUsername(loginRequestDTO.getUsername());
         if (userOptional.isEmpty()) {
             throw new UsernameNotFoundException("User with that name has not been registered!");
@@ -67,26 +73,33 @@ public class AuthService {
         user.setToken(token);
         userRepository.save(user);
 
+        log.info("Authentication successful");
         return new TokenResponseDTO(token);
     }
 
     public void logout(HttpServletRequest request) {
+        log.info("Starting logout process");
         UserEntity user = getUserByJWT(request);
         user.setToken(null);
 
         userRepository.save(user);
+        log.info("Logout successful");
     }
 
     public void sendVerificationCode(HttpServletRequest request) {
+        log.info("Starting process to send verification code");
         UserEntity user = getUserByJWT(request);
         user.setTimeSendingVerificationCode(Instant.now());
 
         userRepository.save(user);
+        log.info("Verification code sent successfully");
     }
 
     public TokenResponseDTO resetPassword(PasswordResetDTO passwordResetDTO) {
+        log.info("Starting password reset process");
         Optional<UserEntity> userOptional = userRepository.findByUsername(passwordResetDTO.getUsername());
         if (userOptional.isEmpty()) {
+            log.warn("User not found");
             throw new UsernameNotFoundException("User with that name has not been registered!");
         }
 
@@ -105,8 +118,10 @@ public class AuthService {
             user.setToken(token);
 
             userRepository.save(user);
+            log.info("Password reset successful");
             return new TokenResponseDTO(token);
         } else {
+            log.warn("Verification code is incorrect");
             throw new VerificationCodeException("Verification code is incorrect");
         }
     }

@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/places/**").hasAuthority("USER")
                 .requestMatchers("/api/v1/events/**").hasAuthority("USER")
                 .requestMatchers("/api/v1/locations/**").hasAuthority("USER")
+                .requestMatchers("/actuator/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
